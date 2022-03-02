@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../src/main.css">
+</head>
+<body>
+  <header>
+    <div class="time-info">
+      <p id="time">00:00 AM</p>
+      <button id="unit-display">Display <span>&deg;C</span></button>
+    </div>
+  </header>
+  <main>
+    <section class="weather-info">
+      <div class="condition">
+        <p>Feels like</p>
+        <p id="feels-like">87%</p>
+      </div>
+      <div class="condition">
+        <p>Humidity</p>
+        <p id="humidity">32%</p>
+      </div>
+      <div class="condition">
+        <p>Wind Speed</p>
+        <p id="wind-speed">15km/h</p>
+      </div>
+    </section>
+    <section class="city-info">
+      <p id="weather">Clear Sky</p>
+      <p id="city">Manila, PH</p>
+      <p id="date">Tuesday, 1st Mar 2022</p>
+      <div class="search" id="search">
+        <input type="text" id="input-city" placeholder="Search location">
+        <img src="./assets/icons/search-outline.svg"/>
+      </div>
+    </section>
+    <section class="today-info">
+      <img id="today-icon" src="./assets/icons/moon-icon.svg"/>
+      <p id="day-night">Night</p>
+      <p id="temp">19 <span class="unit">&deg;C</span></p>
+    </section>
+  </main>
+  <script src="main.js"></script>
+</body>
+</html>  
