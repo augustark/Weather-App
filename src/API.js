@@ -1,4 +1,4 @@
-import {weatherKey, unsplashKey} from '../keys'
+import {weatherKey, unsplashKey} from '../keys/keys'
 
 const getWeather = async (city, unit = 'metric') => {
   try {
