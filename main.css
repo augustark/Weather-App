@@ -1,5 +1,5 @@
 :root {
-  --bg: url('../dist/assets/img/anatoliy-shostak-lF_1dZZSju0-unsplash.jpg')
+  --bg: url('./assets/img/anatoliy-shostak-lF_1dZZSju0-unsplash.jpg')
 }
 
 *, *::before, *::after {
