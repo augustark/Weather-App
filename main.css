@@ -20,7 +20,8 @@ p {
 }
 
 body {
-  background: var(--bg), #5E5e5e;
+  background-image: var(--bg);
+  background-color: #5E5e5e;
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
