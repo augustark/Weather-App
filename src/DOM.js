@@ -1,56 +1,53 @@
-import {getWeather, getCurrentTime, getCurrentDate, nightAndDay} from './Functions'
+import {getCurrentTime, getCurrentDate, getNightDay} from './Date_Time'
+import {getWeather, getImage} from './API'
 
-export function Init() {
-  DOM.Search()
-  DOM.ToggleUnit()
-  DOM.Render('auckland')
+export default function Init() {
+  DOM.Render('London')
 }
 
 const DOM = (function(){
   let CITY_ID = ''
   let UNIT_ID = ''
-
-  function Search() {
-    document
-      .getElementById('search')
-      .addEventListener('click', function() {
-        const input = document.querySelector('input[type="text"]')
-        input.style.display = 'flex'
-        input.setAttribute('autofocus', true)
-        input.classList.remove('hide')
-        input.focus()
-        input.addEventListener('blur', handleBlur)
-        input.addEventListener('keypress', handleEnter)
-      })
-  }
-
-  function ToggleUnit() {
-    document
-      .getElementById('unit-display')
-      .addEventListener('click', handleToggler)
-  }
   
   async function Render(city, unit) {
     CITY_ID = city
     UNIT_ID = unit
 
-    console.log(CITY_ID, UNIT_ID)
     const data = await getWeather(city, unit)
-    DOMRender(data.description, data.city_country, data.feels_like, data.humidity, data.wind_speed, data.temp)
+    const input = document.querySelector('input[type="text"]')
+    if (data) {
+        input.placeholder = 'Search location'
+        DOMRender(data)
+    } else {
+      input.placeholder = 'Location not found'
+    }
+  }
+
+  async function renderImage(query) {
+    let q = [
+      ...query.split(' '), 
+      getNightDay().toLowerCase()
+    ].join('+')
+
+    let img = await getImage(q)
+
+    document
+      .documentElement
+      .style.setProperty('--bg', `url(${imgFull})`); 
+    
+    const credit = document.getElementById('credit')
+    credit.innerHTML = img.user.name
+    credit.parentElement.href = img.user.portfolio_url
   }
   
   function handleToggler() {
     let unit = this.children[0]
     unit.innerHTML = unit.textContent === '°F' ? '°C' : '°F'
-
-    let metric = unit.textContent === '°F' ? 'imperial' : 'metric'
-    UNIT_ID = metric
-    // console.log(CITY_ID, UNIT_ID)
+    UNIT_ID = unit.textContent === '°F' ? 'imperial' : 'metric'
     Render(CITY_ID, UNIT_ID)
   }
   
   function handleBlur() {
-    console.log(this)
     if (window.innerWidth < 700)  {
       this.style.display = 'none'
       this.value = ''
@@ -60,16 +57,33 @@ const DOM = (function(){
   function handleEnter(e) {
     if (e.key === 'Enter') {
       CITY_ID = this.value.toLowerCase()
-      console.log(CITY_ID, UNIT_ID)
       Render(CITY_ID, UNIT_ID)
       this.value = ''
     }
   }
 
-  function DOMRender(desc, city, feels_like, humidity, wind_speed, temp) {
+  function handleInput() {
+      const input = document.querySelector('input[type="text"]')
+      input.style.display = 'flex'
+      input.setAttribute('autofocus', true)
+      input.classList.remove('hide')
+      input.focus()
+      input.addEventListener('blur', handleBlur)
+      input.addEventListener('keypress', handleEnter)
+  }
+
+  function DOMRender(data) {
+    document
+      .getElementById('search')
+      .addEventListener('click', handleInput)
+
+    document
+      .getElementById('unit-display')
+      .addEventListener('click', handleToggler)
+
     document
       .getElementById('time')
-      .innerHTML = getCurrentTime()
+      .innerHTML = getCurrentTime(data.timezone)
   
     document
       .getElementById('date')
@@ -77,36 +91,45 @@ const DOM = (function(){
   
     document
       .getElementById('day-night')
-      .innerHTML = nightAndDay()
+      .innerHTML = getNightDay()
   
     document
       .getElementById('weather')
-      .innerHTML = desc
+      .innerHTML = data.description
   
     document
       .getElementById('city')
-      .innerHTML = city
+      .innerHTML = data.city_country
   
     document
       .getElementById('feels-like')
-      .innerHTML = feels_like
+      .innerHTML = data.feels_like
   
     document
       .getElementById('humidity')
-      .innerHTML = humidity
+      .innerHTML = data.humidity
   
     document
       .getElementById('wind-speed')
-      .innerHTML = wind_speed
+      .innerHTML = data.wind_speed
     
     document  
       .getElementById('temp')
-      .innerHTML = temp
+      .innerHTML = data.temp
+
+    document
+      .getElementById('today-icon')
+      .src = data.iconUrl
+    
+    // document
+      // .documentElement
+      // .style.setProperty('--bg', renderImage(data.description));
+    
+    // document.body.style.backgroundImage = renderImage(data.description)
+    renderImage(data.description)
   }
 
   return {
-    Search,
-    ToggleUnit,
     Render
   }
 })()

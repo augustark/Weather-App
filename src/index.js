@@ -1,3 +1,3 @@
-import {Init} from './DOM'
+import Init from './DOM'
 
 Init()
